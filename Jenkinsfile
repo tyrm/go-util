@@ -7,7 +7,7 @@ pipeline {
       agent {
         docker {
           image 'gobuild:1.17'
-          args '--network ${networkName} -e GOCACHE=/gocache -e HOME=${WORKSPACE} -v /var/lib/jenkins/gocache:/gocache'
+          args '-e GOCACHE=/gocache -e HOME=${WORKSPACE} -v /var/lib/jenkins/gocache:/gocache -v /var/lib/jenkins/go:/go'
         }
       }
       steps {
