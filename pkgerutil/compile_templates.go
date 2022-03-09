@@ -40,6 +40,7 @@ func CompileTemplates(dir string, suffix string) (*template.Template, error) {
 		// Now read it.
 		sl, err := ioutil.ReadAll(f)
 		if err != nil {
+			return err
 		}
 
 		// It can now be parsed as a string.
