@@ -24,6 +24,8 @@ func TestCompileTemplates(t *testing.T) {
 	}{
 		{"static", nil, "Static Text.", nil},
 		{"dynamic", "Dynamic Text.", "Dynamic Text.", nil},
+		{"dynamic", "<a href=\"/link\">link</a>", "&lt;a href=&#34;/link&#34;&gt;link&lt;/a&gt;", nil},
+		{"htmlsafe", "<a href=\"/link\">link</a>", "<a href=\"/link\">link</a>", nil},
 		{"dec", 5, "4", nil},
 		{"inc", 1, "2", nil},
 	}

@@ -19,7 +19,7 @@ func CompileTemplates(dir string, suffix string) (*template.Template, error) {
 			return i
 		},
 		"htmlSafe": func(html string) template.HTML {
-			/* #nosec G203 -- command it meant to display html as is */
+			/* #nosec G203 -- command is meant to display html as is */
 			return template.HTML(html)
 		},
 		"inc": func(i int) int {
