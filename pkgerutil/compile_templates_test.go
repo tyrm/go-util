@@ -7,23 +7,23 @@ import (
 	"testing"
 )
 
-func TestCompileTemplates(t *testing.T) {
-	funcs := template.FuncMap{
-		"dec": func(i int) int {
-			i--
-			return i
-		},
-		"htmlSafe": func(html string) template.HTML {
-			/* #nosec G203 -- command is meant to display html as is */
-			return template.HTML(html)
-		},
-		"inc": func(i int) int {
-			i++
-			return i
-		},
-	}
+var funcs = template.FuncMap{
+	"dec": func(i int) int {
+		i--
+		return i
+	},
+	"htmlSafe": func(html string) template.HTML {
+		/* #nosec G203 -- command is meant to display html as is */
+		return template.HTML(html)
+	},
+	"inc": func(i int) int {
+		i++
+		return i
+	},
+}
 
-	templates, err := CompileTemplates("", ".gohtml", &funcs)
+func TestCompileTemplates(t *testing.T) {
+	templates, err := CompileTemplates("/pkgerutil/test/templates", ".gohtml", &funcs)
 	if err != nil {
 		t.Errorf("compiling templates: %s", err.Error())
 		return
@@ -66,5 +66,14 @@ func TestCompileTemplates(t *testing.T) {
 				t.Errorf("[%d] got invalid output for %s, got: '%v', want: '%v'", i, table.template, respStr, table.output)
 			}
 		})
+	}
+}
+
+func TestCompileTemplatesBad(t *testing.T) {
+	errText := "template: :1: unexpected EOF"
+	_, err := CompileTemplates("/pkgerutil/test/templates", ".gohtml-bad", &funcs)
+	if err.Error() != errText {
+		t.Errorf("wrong error, got: '%v', want: '%v'", err.Error(), errText)
+		return
 	}
 }
