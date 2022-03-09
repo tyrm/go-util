@@ -3,11 +3,27 @@ package pkgerutil
 import (
 	"bytes"
 	"fmt"
+	"html/template"
 	"testing"
 )
 
 func TestCompileTemplates(t *testing.T) {
-	templates, err := CompileTemplates("", ".gohtml")
+	funcs := template.FuncMap{
+		"dec": func(i int) int {
+			i--
+			return i
+		},
+		"htmlSafe": func(html string) template.HTML {
+			/* #nosec G203 -- command is meant to display html as is */
+			return template.HTML(html)
+		},
+		"inc": func(i int) int {
+			i++
+			return i
+		},
+	}
+
+	templates, err := CompileTemplates("", ".gohtml", &funcs)
 	if err != nil {
 		t.Errorf("compiling templates: %s", err.Error())
 		return

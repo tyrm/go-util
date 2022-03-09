@@ -10,23 +10,12 @@ import (
 
 // CompileTemplates takes a pkger dir and turns it into templates.
 // Note: dir should be provided by pkger.Include
-func CompileTemplates(dir string, suffix string) (*template.Template, error) {
+func CompileTemplates(dir string, suffix string, funcs *template.FuncMap) (*template.Template, error) {
 	tpl := template.New("")
 
-	tpl.Funcs(template.FuncMap{
-		"dec": func(i int) int {
-			i--
-			return i
-		},
-		"htmlSafe": func(html string) template.HTML {
-			/* #nosec G203 -- command is meant to display html as is */
-			return template.HTML(html)
-		},
-		"inc": func(i int) int {
-			i++
-			return i
-		},
-	})
+	if funcs != nil {
+		tpl.Funcs(*funcs)
+	}
 
 	err := pkger.Walk(dir, func(path string, info os.FileInfo, _ error) error {
 		if info.IsDir() || !strings.HasSuffix(path, suffix) {
