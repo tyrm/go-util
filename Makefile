@@ -2,15 +2,16 @@ fmt:
 	go fmt ./...
 
 lint:
-	golint ./...
+	@echo linting
+	@golint $(shell go list ./... | grep -v /vendor/)
 
-test-local: tidy fmt lint
+test: tidy fmt lint
 	go test -cover ./...
 
-test-local-race: tidy fmt lint
+test-race: tidy fmt lint
 	go test -race -cover ./...
 
-test-local-verbose: tidy fmt lint
+test-verbose: tidy fmt lint
 	go test -v -cover ./...
 
 tidy:
